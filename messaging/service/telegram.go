@@ -33,7 +33,7 @@ var bot *tgbotapi.BotAPI
 
 func init() {
 	var err error
-	bot, err = tgbotapi.NewBotAPI("330658604:AAH-_CnngDozmPY2iGBDVBd-TAjZ3CVcqnE")
+	bot, err = tgbotapi.NewBotAPI("348636720:AAGRmH4FYDBPLxIH5qIoXRdUj5rvZjAII8A")
 	if err != nil {
 		log.Panic(err)
 	}
