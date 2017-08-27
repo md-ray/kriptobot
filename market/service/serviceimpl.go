@@ -10,17 +10,19 @@ import (
 )
 
 const (
-	BITTREX_API_KEY      = "644a03c302374523869ba9e87421b3ae"
-	BITTREX_API_SECRET   = "MU72EQ6OTBDVGY65"
-	DB_CONNECTION_STRING = "root@tcp(127.0.0.1:3306)/kriptobot_market"
+	BITTREX_API_KEY    = "644a03c302374523869ba9e87421b3ae"
+	BITTREX_API_SECRET = "MU72EQ6OTBDVGY65"
 )
 
 var bittrexapi = bittrex.New(BITTREX_API_KEY, BITTREX_API_SECRET)
 
 var Db *sql.DB
 
-func init() {
-	db, err := sql.Open("mysql", DB_CONNECTION_STRING)
+func ServiceImplInit(config Config) {
+	if config.DbConnectionString == "" {
+		panic("env not defined=DbConnectionString")
+	}
+	db, err := sql.Open("mysql", config.DbConnectionString)
 	if err != nil {
 		panic(err)
 	}

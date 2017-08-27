@@ -1,5 +1,9 @@
 package service
 
+type Config struct {
+	DbConnectionString string
+}
+
 // data model
 type MarketSummary struct {
 	High    float64

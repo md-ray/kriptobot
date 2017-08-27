@@ -7,16 +7,38 @@ import (
 
 	"github.com/go-kit/kit/log"
 	httptransport "github.com/go-kit/kit/transport/http"
+	"github.com/jasonlvhit/gocron"
+	"github.com/kelseyhightower/envconfig"
 	msvc "github.com/saviourcat/kriptobot/market/service"
 )
+
+var svc msvc.MarketService
+
+func repeatRefresh() {
+	svc.RefreshAllTicks(1)
+	svc.RefreshAllTicks(2)
+}
 
 func main() {
 	logger := log.NewLogfmtLogger(os.Stderr)
 
+	// init config
+	var config msvc.Config
+	err := envconfig.Process("kmarket", &config)
+	if err != nil {
+		panic(err)
+	}
+
+	// init serviceimpl
+	msvc.ServiceImplInit(config)
+
 	//  Data Service
-	var svc msvc.MarketService
 	svc = msvc.MarketServiceImpl{}
 	svc = msvc.LoggingMiddleware{logger, svc}
+
+	// repeatRefresh()
+	gocron.Every(1).Minute().Do(repeatRefresh)
+	gocron.Start()
 	// svc.Init()
 	/*
 		var ticker msvc.Ticker
@@ -25,8 +47,6 @@ func main() {
 		ticker.Bid = 3
 		err := svc.RefreshTick(1, "BTC-NEO", ticker)
 	*/
-	svc.RefreshAllTicks(1)
-	svc.RefreshAllTicks(2)
 
 	/*
 		if err != nil {
