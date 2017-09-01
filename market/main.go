@@ -17,6 +17,7 @@ var svc msvc.MarketService
 func repeatRefresh() {
 	svc.RefreshAllTicks(1)
 	svc.RefreshAllTicks(2)
+	svc.RefreshAllTicks(3)
 }
 
 func main() {
@@ -35,6 +36,9 @@ func main() {
 	//  Data Service
 	svc = msvc.MarketServiceImpl{}
 	svc = msvc.LoggingMiddleware{logger, svc}
+
+	//lunotick := msvc.GetLunoTicker("1", "2")
+	//fmt.Printf("hasil = ", lunotick.Ask)
 
 	// repeatRefresh()
 	gocron.Every(1).Minute().Do(repeatRefresh)

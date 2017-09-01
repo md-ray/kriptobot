@@ -72,6 +72,10 @@ func (mrs MarketServiceImpl) RefreshAllTicks(eid int) error {
 		mrs.RefreshTick(2, "eth_idr", GetVIPTicker("eth", "idr"))
 		return nil
 		// fmt.Printf("VIP=?", vipticker)
+	} else if eid == 3 { // luno
+		// var vipbtc = msvc.GetVIPTicker("btc", "idr")
+		mrs.RefreshTick(3, "XBTIDR", GetLunoTicker("btc", "idr"))
+		return nil
 	} else {
 		return errors.New("undefined exchange_id")
 	}

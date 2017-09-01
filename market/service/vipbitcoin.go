@@ -31,7 +31,7 @@ func GetVIPTicker(c1 string, c2 string) Ticker {
 	url := "http://vip.bitcoin.co.id/api/" + coin1code + "_" + coin2code + "/ticker"
 
 	spaceClient := http.Client{
-		Timeout: time.Second * 20, // Maximum of 2 secs
+		Timeout: time.Second * 7,
 	}
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
