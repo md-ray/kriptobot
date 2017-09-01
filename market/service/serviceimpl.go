@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 	bittrex "github.com/toorop/go-bittrex"
@@ -74,7 +75,12 @@ func (mrs MarketServiceImpl) RefreshAllTicks(eid int) error {
 		// fmt.Printf("VIP=?", vipticker)
 	} else if eid == 3 { // luno
 		// var vipbtc = msvc.GetVIPTicker("btc", "idr")
-		mrs.RefreshTick(3, "XBTIDR", GetLunoTicker("btc", "idr"))
+		ticker, err := GetLunoTicker("btc", "idr")
+		if err != nil {
+			log.Fatal(err)
+			return err
+		}
+		mrs.RefreshTick(3, "XBTIDR", ticker)
 		return nil
 	} else {
 		return errors.New("undefined exchange_id")
@@ -86,12 +92,14 @@ func (mrs MarketServiceImpl) RefreshTick(eid int, mCode string, ticker Ticker) e
 	q := "INSERT INTO tick_history (SELECT * FROM current_tick WHERE eid=? AND m_code=?)"
 	stmt, err := Db.Prepare(q)
 	if err != nil {
-		panic(err)
+		// panic(err)
+		log.Fatal(err)
 		return err
 	}
 	_, err = stmt.Exec(eid, mCode)
 	if err != nil {
-		panic(err)
+		// panic(err)
+		log.Fatal(err)
 		return err
 	}
 
@@ -100,12 +108,14 @@ func (mrs MarketServiceImpl) RefreshTick(eid int, mCode string, ticker Ticker) e
 	stmt2, err2 := Db.Prepare(q2)
 	if err2 != nil {
 		// panic(err)
+		log.Fatal(err)
 		return err2
 	}
 	fmt.Println("waktu server=?", ticker.ServerTime)
 	_, err2 = stmt2.Exec(eid, mCode, ticker.Last, ticker.Ask, ticker.Bid, ticker.ServerTime, ticker.Last, ticker.Ask, ticker.Bid, ticker.ServerTime)
 	if err2 != nil {
 		// panic(err2)
+		log.Fatal(err)
 		return err2
 	}
 
