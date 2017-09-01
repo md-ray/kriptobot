@@ -62,6 +62,6 @@ func GetLunoTicker(c1 string, c2 string) (Ticker, error) {
 	b, _ := strconv.ParseFloat(apiret.Ask, 64)
 	c, _ := strconv.ParseFloat(apiret.Last, 64)
 
-	ret = Ticker{a, b, c, apiret.Timestamp}
+	ret = Ticker{a, b, c, apiret.Timestamp / 1000}
 	return ret, nil
 }

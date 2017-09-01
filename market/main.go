@@ -39,6 +39,7 @@ func main() {
 
 	//lunotick := msvc.GetLunoTicker("1", "2")
 	//fmt.Printf("hasil = ", lunotick.Ask)
+	// svc.RefreshAllTicks(3)
 
 	// repeatRefresh()
 	gocron.Every(1).Minute().Do(repeatRefresh)

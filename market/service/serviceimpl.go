@@ -77,7 +77,7 @@ func (mrs MarketServiceImpl) RefreshAllTicks(eid int) error {
 		// var vipbtc = msvc.GetVIPTicker("btc", "idr")
 		ticker, err := GetLunoTicker("btc", "idr")
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 			return err
 		}
 		mrs.RefreshTick(3, "XBTIDR", ticker)
