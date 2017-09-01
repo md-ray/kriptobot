@@ -20,9 +20,10 @@ type LunoAPI struct {
 	Pair      string `json:"pair"`
 }
 
-func GetLunoTicker(c1 string, c2 string) Ticker {
+func GetLunoTicker(c1 string, c2 string) (Ticker, error) {
 	//coin1code := strings.ToLower(c1)
 	//coin2code := strings.ToLower(c2)
+	var ret Ticker
 	url := "https://api.mybitx.com/api/1/ticker?pair=XBTIDR"
 
 	spaceClient := http.Client{
@@ -32,6 +33,7 @@ func GetLunoTicker(c1 string, c2 string) Ticker {
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		log.Fatal(err)
+		return ret, err
 	}
 
 	// req.Header.Set("User-Agent", "spacecount-tutorial")
@@ -39,6 +41,7 @@ func GetLunoTicker(c1 string, c2 string) Ticker {
 	res, getErr := spaceClient.Do(req)
 	if getErr != nil {
 		log.Fatal(getErr)
+		return ret, err
 	}
 
 	body, readErr := ioutil.ReadAll(res.Body)
@@ -50,6 +53,7 @@ func GetLunoTicker(c1 string, c2 string) Ticker {
 	jsonErr := json.Unmarshal(body, &apiret)
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
+		return ret, err
 	}
 
 	fmt.Printf("hasil api = ?\n", apiret)
@@ -58,6 +62,6 @@ func GetLunoTicker(c1 string, c2 string) Ticker {
 	b, _ := strconv.ParseFloat(apiret.Ask, 64)
 	c, _ := strconv.ParseFloat(apiret.Last, 64)
 
-	ticker := Ticker{a, b, c, apiret.Timestamp}
-	return ticker
+	ret = Ticker{a, b, c, apiret.Timestamp}
+	return ret, nil
 }
